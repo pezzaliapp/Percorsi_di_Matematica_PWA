@@ -38,17 +38,18 @@
     {p:'Il tasto SHIFT serve per…', a:'Scrivere maiuscole e simboli', o:['Scrivere maiuscole e simboli','Spegnere il PC','Spostare file','Aprire la posta']}
   ]); }
   function genInfoHwSwBasics(){ return makeBank('ICT: hardware/software (base)',[
-  {p:'La CPU è…', a:'Il processore del computer', o:['Il processore del computer','La memoria permanente','Un programma','La stampante']},
-  {p:'La RAM è…', a:'Memoria di lavoro volatile', o:['Memoria di lavoro volatile','Archivio su disco','Stampante','Router']},
-  {p:'La ROM/firmware contiene…', a:'Istruzioni permanenti di avvio', o:['Istruzioni permanenti di avvio','File temporanei','Documenti','Password']},
-  {p:'Un esempio di hardware è…', a:'La tastiera', o:['La tastiera','Il browser','Un file .docx','Un’app di posta']},
-  {p:'Un esempio di software è…', a:'Il sistema operativo o un’app', o:['Il sistema operativo o un’app','La scheda video','La chiavetta USB','Il monitor']},
-  {p:'Il sistema operativo è…', a:'Il software base che gestisce hardware e programmi', o:['Il software base che gestisce hardware e programmi','Una periferica','Un cavo di rete','Una cartella']},
-  {p:'Una periferica di input è…', a:'La tastiera', o:['La tastiera','Le casse audio','Il monitor','La stampante 3D']},
-  {p:'Una periferica di output è…', a:'Il monitor', o:['Il monitor','Il microfono','La webcam','La tastiera']},
-  {p:'La memoria di massa è…', a:'SSD/HDD', o:['SSD/HDD','RAM','CPU','Scheda madre']},
-  {p:'Il mouse è…', a:'Dispositivo di puntamento (hardware)', o:['Dispositivo di puntamento (hardware)','Programma','File PDF','Password']}
-]); }
+    {p:'La CPU è…', a:'Il processore del computer', o:['Il processore del computer','La memoria permanente','Un programma','La stampante']},
+    {p:'Il software è…', a:'L’insieme dei programmi', o:['L’insieme dei programmi','La parte fisica','Solo Internet','Solo i giochi']},
+    {p:'Un esempio di hardware è…', a:'La tastiera', o:['La tastiera','Il browser','Un file .docx','Un’app di posta']},
+      {p:'La RAM è…', a:'Memoria di lavoro volatile', o:['Memoria di lavoro volatile','Archivio su disco','Stampante','Router']},
+{p:'La ROM/firmware contiene…', a:'Istruzioni permanenti di avvio', o:['Istruzioni permanenti di avvio','File temporanei','Documenti','Password']},
+{p:'Un esempio di software è…', a:'Il sistema operativo o un’app', o:['Il sistema operativo o un’app','La scheda video','La chiavetta USB','Il monitor']},
+{p:'Il sistema operativo è…', a:'Il software base che gestisce hardware e programmi', o:['Il software base che gestisce hardware e programmi','Una periferica','Un cavo di rete','Una cartella']},
+{p:'Una periferica di input è…', a:'La tastiera', o:['La tastiera','Le casse audio','Il monitor','La stampante 3D']},
+{p:'Una periferica di output è…', a:'Il monitor', o:['Il monitor','Il microfono','La webcam','La tastiera']},
+{p:'La memoria di massa è…', a:'SSD/HDD', o:['SSD/HDD','RAM','CPU','Scheda madre']},
+{p:'Il mouse è…', a:'Dispositivo di puntamento (hardware)', o:['Dispositivo di puntamento (hardware)','Programma','File PDF','Password']}
+  
   ]); }
   function genInfoFiles(){ return makeBank('ICT: file/cartelle',[
     {p:'Estensione tipica di un’immagine', a:'.jpg', o:['.jpg','.docx','.pptx','.xlsx']},
@@ -80,15 +81,9 @@
     {p:'Un esempio di 2FA è…', a:'Codice OTP via app', o:['Codice OTP via app','Emoji nel nome','Password breve','Condivisione password']}
   ]); }
   function genCS_OSvsSW(){ return makeBank('ICT: OS vs SW',[
-  {p:'Il kernel appartiene a…', a:'Sistema operativo', o:['Sistema operativo','Applicazione','Firmware','Driver video']},
-  {p:'Un driver è…', a:'Software che controlla l’hardware', o:['Software che controlla l’hardware','Memoria di massa','Tipo di processore','Rete privata']},
-  {p:'La RAM è…', a:'Memoria di lavoro volatile', o:['Memoria di lavoro volatile','Archivio permanente','Un programma','Periferica di rete']},
-  {p:'Esempio di sistema operativo', a:'Linux/macOS/Windows', o:['Linux/macOS/Windows','PowerPoint','Chrome','PDF']},
-  {p:'Esempio di software applicativo', a:'Foglio di calcolo', o:['Foglio di calcolo','BIOS','Scheduler del kernel','Router']},
-  {p:'Il file system si occupa di…', a:'Organizzare file e cartelle', o:['Organizzare file e cartelle','Disegnare grafici','Aumentare la RAM','Crittografare HTTPS']},
-  {p:'Gli aggiornamenti di sicurezza servono a…', a:'Correggere vulnerabilità note', o:['Correggere vulnerabilità note','Aggiungere pubblicità','Cambiare provider','Formattare il disco']},
-  {p:'Il BIOS/UEFI è…', a:'Firmware di avvio della macchina', o:['Firmware di avvio della macchina','Un’applicazione Office','Un antivirus','Un cavo']}
-]); }
+    {p:'Il kernel appartiene a…', a:'Sistema operativo', o:['Sistema operativo','Applicazione','Firmware','Driver video']},
+    {p:'Un driver è…', a:'Software che controlla l’hardware', o:['Software che controlla l’hardware','Memoria di massa','Tipo di processore','Rete privata']},
+    {p:'La RAM è…', a:'Memoria di lavoro volatile', o:['Memoria di lavoro volatile','Archivio permanente','Un programma','Periferica di rete']}
   ]); }
   function genCS_NetworksLiceo(){ return makeBank('ICT: reti/protocolli',[
     {p:'HTTPS usa tipicamente la porta…', a:'443', o:['443','80','21','25']},
