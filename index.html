@@ -1,121 +1,44 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Percorsi di Matematica — PWA v6.3e</title>
-<link rel="manifest" href="manifest.json">
-<link rel="icon" sizes="192x192" href="icons/icon-192.png">
-<meta name="theme-color" content="#0b5fff">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Percorsi di Matematica — PWA v6.3f</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="statusBar" class="status" style="display:none">Modalità LIM ATTIVA — <button id="updateBtn" class="secondary">Aggiorna App</button></div>
-  <header>
-    <h1>📘 Percorsi di Matematica — PWA v6.3e</h1>
-    <div class="header-actions">
-      <a class="secondary" href="readme.html" target="_blank">Guida</a>
-      <a class="secondary" href="indicazioni.html" target="_blank">Indicazioni nazionali</a>
-      <button id="limBtn" class="secondary" type="button">Modalità LIM</button>
-      <button id="installBtn" hidden>Installa App</button>
+  <header class="sticky">
+    <h1>Percorsi di Matematica — PWA v6.3f</h1>
+    <div class="actions">
+      <a href="readme.html" class="btn">Guida</a>
+      <a href="indicazioni.html" class="btn">Indicazioni nazionali</a>
+      <button class="btn" onclick="toggleLIM()">Modalità LIM</button>
+      <button class="btn" onclick="installApp()">Installa App</button>
     </div>
   </header>
-  <main>
-    <section id="intro" class="card">
-      <h2>Seleziona anno e percorso</h2>
-      <p class="lead">Ogni <strong>anno</strong> ha <strong>categorie</strong> coerenti con le Indicazioni Nazionali.</p>
-      <div class="grid2">
-        <label>Anno/Grado
-          <select id="livello">
-            <option value="primaria1">1ª primaria</option>
-            <option value="primaria2" selected>2ª primaria</option>
-            <option value="primaria3">3ª primaria</option>
-            <option value="primaria4">4ª primaria</option>
-            <option value="primaria5">5ª primaria</option>
-            <option value="media1">1ª media</option>
-            <option value="media2">2ª media</option>
-            <option value="media3">3ª media</option>
-            <option value="liceo1">1ª liceo</option>
-            <option value="liceo2">2ª liceo</option>
-            <option value="liceo3">3ª liceo</option>
-            <option value="liceo4">4ª liceo</option>
-            <option value="liceo5">5ª liceo</option>
-          </select>
-        </label>
-        <label>Percorso
-          <select id="percorso"></select>
-        </label>
-      </div>
-      <div class="actions">
-        <button id="playBtn" class="primary" type="button">Inizia l'avventura</button>
-        <button id="howBtn" class="secondary" type="button">Come si gioca</button>
-        <button id="refreshPathsBtn" class="secondary" type="button">Ripristina percorsi</button>
-      </div>
-    </section>
 
-    <section id="howto" class="card hidden">
-      <h2>Come si gioca</h2>
-      <ul>
-        <li>Domande a risposta multipla con 4 opzioni.</li>
-        <li>Ogni risposta esatta vale una ⭐. Obiettivo: 8 domande.</li>
-        <li>La <strong>Modalità LIM</strong> ingrandisce testi e pulsanti.</li>
-      </ul>
-      <button class="secondary" id="backIntro" type="button">Torna</button>
-    </section>
+  <main class="content">
+    <h2>Seleziona anno e percorso</h2>
+    <p>Ogni <strong>anno</strong> ha <strong>categorie</strong> coerenti con le Indicazioni Nazionali. Scegli l'anno, poi il percorso.</p>
 
-    <section id="game" class="card hidden">
-      <div class="hud">
-        <div>Anno: <span id="gradeName"></span></div>
-        <div>Percorso: <span id="levelName"></span></div>
-        <div>Stelle: <span id="stars">0</span></div>
-        <div>Progresso: <span id="progress">0</span>/<span id="total">0</span></div>
-      </div>
-      <div id="prompt" class="prompt"></div>
-      <div id="legend" class="legend muted"></div>
-      <div id="choices" class="choices"></div>
-      <div class="actions">
-        <button id="menuBtn" class="secondary" type="button">Menu</button>
-        <button id="skipBtn" class="secondary" type="button">Salta (-0.5)</button>
-        <button id="nextBtn" class="primary hidden" type="button">Prossima domanda</button>
-      </div>
-    </section>
+    <label for="gradeSelect">Anno/Grado</label>
+    <select id="gradeSelect"></select>
 
-    <section id="summary" class="card hidden">
-      <h2>Sessione completata</h2>
-      <p>Stelle raccolte: <strong id="finalStars"></strong></p>
-      <p id="feedback"></p>
-      <div class="actions">
-        <button id="againBtn" class="primary" type="button">Rigioca</button>
-        <button id="homeBtn" class="secondary" type="button">Menu</button>
-      </div>
-    </section>
+    <label for="pathSelect">Percorso</label>
+    <select id="pathSelect"></select>
+
+    <div class="actions" style="margin-top:1em;">
+      <button class="btn" onclick="startQuiz()">Inizia l'avventura</button>
+      <button class="btn" onclick="howToPlay()">Come si gioca</button>
+      <button class="btn" onclick="resetProgress()">Ripristina percorsi</button>
+    </div>
+
+    <div id="quizContainer" style="margin-top:2em;"></div>
   </main>
-  <footer><small>© 2025 PezzaliAPP — PWA educativa.</small></footer>
 
-  <!-- UI populator fallback -->
-  <script>
-  (function(){
-    var UI_ROUTE={
-      primaria1:['Addizioni entro 20','Sottrazioni entro 20','Tabelline 2/5/10 (prime)','Geometria: perimetro (piccoli)','Informatica: mouse e tastiera','Informatica: hardware/software (base)'],
-      primaria2:['Addizioni con riporto (entro 100)','Sottrazioni con prestito (entro 100)','Tabelline 2/3/4/5/10','Geometria: perimetro (rettangoli)','Informatica: file e cartelle','Informatica: hardware/software (base)'],
-      primaria3:['Tabelline complete','Divisioni semplici','Geometria: perimetro (poligoni)','Informatica: coding a blocchi','Informatica: password (base)','Informatica: Internet e ricerca'],
-      primaria4:['Frazioni equivalenti (semplici)','Decimali (somma facile)','Aree: rettangolo/triangolo (piccoli)','Proporzioni semplici','Informatica: Internet e ricerca'],
-      primaria5:['Percentuali di base','Proporzioni','Volume del parallelepipedo (piccoli)','Decimali (somma)','Informatica: sicurezza (password)','Informatica: gestione file'],
-      media1:['Equazioni di 1° grado (semplici)','Percentuali (problemi)','Pitagora (cateti piccoli)','Informatica: ricerca avanzata'],
-      media2:['Equazioni di 1° grado','Percentuali','Pitagora','Informatica: sicurezza (2FA)'],
-      media3:['f(x)=mx+q (valori)','Pitagora e percentuali (misto)','Quadratica (radici — concetto)','Informatica: ricerca avanzata'],
-      liceo1:['f(x)=mx+q (valori)','Equazioni di 1° grado (con parametri)','Informatica: sistemi operativi e software'],
-      liceo2:['Quadratica (somma radici)','f(x)=mx+q (valori)','Informatica: reti e protocolli'],
-      liceo3:['Trigonometria (angoli notevoli)','Quadratica (radici)','Informatica: basi di dati (concetti)'],
-      liceo4:['Trigonometria (angoli notevoli)','f(x)=mx+q (valori)','Informatica: algoritmi e complessità (base)'],
-      liceo5:['Trigonometria (angoli notevoli)','Quadratica (radici)','f(x)=mx+q (valori)','Informatica: sicurezza e privacy (avanzato)']
-    };
-    function $(id){return document.getElementById(id)}
-    function fill(){var p=$('percorso'),g=$('livello'),arr=UI_ROUTE[g.value]||[]; p.innerHTML=''; arr.forEach(n=>{var o=document.createElement('option');o.textContent=n;o.value=n;p.appendChild(o);});}
-    document.addEventListener('DOMContentLoaded',function(){fill();$('livello').addEventListener('change',fill);$('refreshPathsBtn').addEventListener('click',fill);});
-    try{window._uiRoute=UI_ROUTE;}catch(e){}
-  })();
-  </script>
+  <footer style="margin-top:2em;font-size:.85em;text-align:center;color:#666;">
+    © 2025 PezzaliAPP — PWA educativa.
+  </footer>
 
   <script src="app.js"></script>
 </body>
