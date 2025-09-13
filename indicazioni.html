@@ -2,56 +2,133 @@
 <html lang="it">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Indicazioni nazionali — Percorsi di Matematica</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indicazioni nazionali — PWA v6.3d</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    main{max-width:960px;margin:20px auto;padding:0 12px}
-    h1,h2{color:#0b5fff}
+    main{max-width:980px;margin:20px auto;padding:0 12px}
+    nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 16px}
+    nav.toc a{padding:8px 10px;border-radius:10px;background:#e9eefc;color:#0b3fff;text-decoration:none;font-weight:600}
+    h1,h2,h3{margin:.6rem 0}
     table{width:100%;border-collapse:collapse;margin:10px 0}
-    th,td{border:1px solid #d0d7de;padding:8px;vertical-align:top;text-align:left}
+    th,td{border:1px solid #d0d7de;padding:8px;text-align:left;vertical-align:top}
+    .note{background:#f8fafc;border-left:4px solid #0b5fff;padding:10px 12px;border-radius:8px;margin:10px 0}
+    .badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#eef2ff;color:#1e3a8a;font-size:.85rem;margin-left:6px}
     .muted{color:#475569}
-    .toc a{display:inline-block;margin:4px 6px;padding:6px 10px;border-radius:8px;background:#eef2ff;color:#0b5fff;text-decoration:none;font-weight:600}
   </style>
 </head>
 <body>
-  <header class="header"><div class="actions">
-    <a class="btn" href="index.html">Torna all'app</a>
-  </div></header>
-  <main>
-    <h1>📗 Indicazioni nazionali</h1>
-    <p class="muted">Mappa dei traguardi e percorsi per docenti e studenti, in coerenza con le Indicazioni nazionali.</p>
-    <div class="toc">
-      <a href="#primaria">Primaria</a>
-      <a href="#medie">Medie</a>
-      <a href="#liceo">Liceo</a>
-      <a href="#griglie">Griglie</a>
+  <header style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#0b5fff;color:#fff">
+    <h1 style="margin:0">📗 Indicazioni nazionali — PWA v6.3d</h1>
+    <div>
+      <a href="index.html" class="secondary" style="background:#e9eefc;color:#0b3fff;padding:8px 12px;border-radius:10px;text-decoration:none">Torna all'app</a>
     </div>
-    <h2 id="primaria">Primaria (1ª–5ª)</h2>
-    <table><thead><tr><th>Anno</th><th>Matematica</th><th>Informatica</th></tr></thead>
-      <tbody>
-        <tr><td>1ª</td><td>Addizioni/Sottrazioni entro 20; figure semplici</td><td>Mouse/tastiera; HW/SW base</td></tr>
-        <tr><td>2ª</td><td>Addizioni/Sottrazioni entro 100; perimetro rettangoli; tabelline</td><td>File/cartelle; HW/SW base</td></tr>
-        <tr><td>3ª</td><td>Tabelline complete; divisioni; perimetri</td><td>Coding a blocchi; password base; ricerca</td></tr>
-        <tr><td>4ª</td><td>Frazioni/decimali; aree rett/tri</td><td>Cittadinanza digitale; ricerca online</td></tr>
-        <tr><td>5ª</td><td>Percentuali; proporzioni; volumi</td><td>Sicurezza password; gestione file</td></tr>
-      </tbody></table>
-    <h2 id="medie">Secondaria di I grado</h2>
-    <ul>
-      <li>1ª: equazioni 1° grado elementari, percentuali, Pitagora (semplice); ricerca avanzata</li>
-      <li>2ª: equazioni 1° grado, Pitagora; sicurezza (2FA)</li>
-      <li>3ª: f(x)=mx+q, quadratica (radici); ricerca avanzata</li>
-    </ul>
-    <h2 id="liceo">Liceo scientifico</h2>
-    <ul>
-      <li>1ª: funzioni lineari; OS/software (kernel, RAM, driver)</li>
-      <li>2ª: quadratica; reti (DNS, IPv4, HTTPS/443)</li>
-      <li>3ª: trigonometria; database/SQL</li>
-      <li>4ª: trigonometria; algoritmi e complessità (O(n), O(log n))</li>
-      <li>5ª: funzioni/trigonometria; sicurezza e privacy (phishing, 2FA, crittografia)</li>
-    </ul>
-    <h2 id="griglie">Griglie di valutazione</h2>
-    <p>Rubriche sintetiche per primaria (matematica/informatica) e liceo (informatica). Adattabili a verifiche formative e sommative.</p>
+  </header>
+
+  <main>
+    <p class="muted">Questa pagina sintetizza traguardi, obiettivi e griglie di valutazione per <strong>docenti</strong> e <strong>studenti</strong>, in coerenza con le Indicazioni nazionali, e collega ciascun <em>Percorso</em> dell’app all’anno/grado corretto.</p>
+
+    <nav class="toc">
+      <a href="#primaria">Primaria</a>
+      <a href="#medie">Secondaria di I grado (Medie)</a>
+      <a href="#liceo">Liceo scientifico</a>
+      <a href="#informatica">Informatica (tutti i gradi)</a>
+      <a href="#griglie">Griglie di valutazione</a>
+    </nav>
+
+    <section id="primaria" class="card">
+      <h2>🧒 Scuola Primaria (1ª–5ª)</h2>
+      <div class="note">Traguardi progressivi in linea con le Indicazioni, con attenzione a numeri, spazio e figure, relazioni, dati e cittadinanza digitale.</div>
+
+      <h3>Competenze in uscita</h3>
+      <ul>
+        <li><strong>1ª–2ª:</strong> addizioni/sottrazioni entro 100, prime tabelline (2/5/10), figure piane, uso intuitivo del denaro.</li>
+        <li><strong>3ª:</strong> tabelline complete, divisioni semplici, perimetri/aree di figure note, lettura di tabelle.</li>
+        <li><strong>4ª:</strong> frazioni e decimali, aree/volumi semplici, proporzioni elementari, rappresentazioni grafiche.</li>
+        <li><strong>5ª:</strong> percentuali, grandezze e misure, problemi con più passaggi, introduzione a concetti di statistica.</li>
+      </ul>
+
+      <h3>Mappa Percorsi → Anno</h3>
+      <table>
+        <thead><tr><th>Anno</th><th>Percorsi (Matematica)</th><th>Percorsi (Informatica)</th></tr></thead>
+        <tbody>
+          <tr><td>1ª</td><td>Addizioni/Sottrazioni entro 20; Tabelline 2/5/10 (prime); Perimetro (piccoli)</td><td>Mouse e tastiera; Hardware/Software (base)</td></tr>
+          <tr><td>2ª</td><td>Addizioni con riporto (≤100); Sottrazioni con prestito (≤100); Perimetro (rettangoli); Tabelline 2/3/4/5/10</td><td>File/Cartelle; Hardware/Software (base)</td></tr>
+          <tr><td>3ª</td><td>Tabelline complete; Divisioni semplici; Perimetro (poligoni)</td><td>Coding a blocchi; Password (base); Internet e ricerca</td></tr>
+          <tr><td>4ª</td><td>Frazioni equivalenti; Decimali (somma); Aree (rettangolo/triangolo)</td><td>Internet e ricerca; Cittadinanza digitale</td></tr>
+          <tr><td>5ª</td><td>Percentuali (base); Proporzioni; Volumi (parallelepipedo)</td><td>Sicurezza (password); Gestione file</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="medie" class="card">
+      <h2>🏫 Secondaria di I grado (Medie 1ª–3ª)</h2>
+      <ul>
+        <li><strong>1ª:</strong> equazioni di 1° grado (semplici), percentuali, Pitagora (cateti piccoli); ricerca avanzata.</li>
+        <li><strong>2ª:</strong> equazioni di 1° grado, percentuali, Pitagora; sicurezza (2FA).</li>
+        <li><strong>3ª:</strong> f(x)=mx+q, concetti di quadratica (radici), Pitagora+percentuali; ricerca avanzata.</li>
+      </ul>
+    </section>
+
+    <section id="liceo" class="card">
+      <h2>🎓 Liceo scientifico (1ª–5ª)</h2>
+      <ul>
+        <li><strong>1ª:</strong> f(x)=mx+q, equazioni 1°; <em>Informatica</em>: sistemi operativi e software (RAM, kernel, driver).</li>
+        <li><strong>2ª:</strong> quadratica (somma radici), f(x)=mx+q; <em>Informatica</em>: reti e protocolli (DNS, IPv4, HTTPS/443).</li>
+        <li><strong>3ª:</strong> trigonometria (angoli notevoli), quadratica; <em>Informatica</em>: basi di dati, SQL.</li>
+        <li><strong>4ª:</strong> trigonometria, funzioni; <em>Informatica</em>: algoritmi e complessità (O(n), O(log n), ricorsione).</li>
+        <li><strong>5ª:</strong> funzioni e trigonometria; <em>Informatica</em>: sicurezza e privacy (phishing, 2FA, crittografia).</li>
+      </ul>
+    </section>
+
+    <section id="informatica" class="card">
+      <h2>💻 Informatica — per tutti i gradi</h2>
+      <p>L’informatica viene introdotta in modo graduale: attività unplugged e uso degli strumenti (primaria), ricerca e cittadinanza digitale (medie), strutturazione disciplinare (liceo: sistemi, reti, database, algoritmi, sicurezza).</p>
+      <ul>
+        <li><strong>Primaria:</strong> mouse/tastiera, HW/SW base, file/cartelle, coding a blocchi, ricerca, sicurezza password.</li>
+        <li><strong>Medie:</strong> ricerca avanzata, 2FA e buone pratiche.</li>
+        <li><strong>Liceo:</strong> OS/software, reti (DNS/HTTPS), database/SQL, algoritmi/complessità, sicurezza/crypto.</li>
+      </ul>
+      <p class="muted">I quiz dell’app sono “allenanti”: usano numeri semplici e domande chiare per il ripasso veloce; non sostituiscono verifiche strutturate.</p>
+    </section>
+
+    <section id="griglie" class="card">
+      <h2>📊 Griglie di valutazione (sintesi)</h2>
+      <h3>Primaria — Matematica</h3>
+      <table>
+        <thead><tr><th>Criterio</th><th>Base</th><th>Intermedio</th><th>Avanzato</th><th>Eccellente</th></tr></thead>
+        <tbody>
+          <tr><td>Calcolo e operazioni</td><td>Risolve con guida.</td><td>Corretto in situazioni note.</td><td>Strategie diverse e controllo.</td><td>Metodo efficiente, spiega e verifica.</td></tr>
+          <tr><td>Problemi</td><td>Dati/quesito con guida.</td><td>Problemi familiari corretti.</td><td>Adatta strategie, stima e controlla.</td><td>Generalizza, giustifica scelte.</td></tr>
+          <tr><td>Spazio e figure</td><td>Riconosce figure note.</td><td>Perimetri/aree semplici.</td><td>Unità adeguate, proprietà.</td><td>Collega figure‑misure‑problemi.</td></tr>
+          <tr><td>Dati e rappresentazioni</td><td>Legge grafici semplici.</td><td>Produce tabelle/grafici base.</td><td>Interpreta e confronta.</td><td>Sceglie rappresentazioni efficaci.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Primaria — Informatica</h3>
+      <table>
+        <thead><tr><th>Criterio</th><th>Base</th><th>Intermedio</th><th>Avanzato</th><th>Eccellente</th></tr></thead>
+        <tbody>
+          <tr><td>Uso strumenti</td><td>Con guida.</td><td>Autonomia entro livello.</td><td>Integra più strumenti.</td><td>Sceglie strumenti e supporta i pari.</td></tr>
+          <tr><td>Pensiero computazionale</td><td>Segue sequenze semplici.</td><td>Compone sequenze lineari.</td><td>Corregge errori (debug).</td><td>Propone varianti ottimizzate.</td></tr>
+          <tr><td>Cittadinanza digitale</td><td>Regole base.</td><td>Applica con guida.</td><td>Agisce responsabilmente.</td><td>Promuove buone pratiche.</td></tr>
+          <tr><td>Creatività digitale</td><td>Elaborati semplici.</td><td>Prodotti ordinati.</td><td>Multimedia funzionale.</td><td>Prodotti originali coerenti.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Liceo — Informatica</h3>
+      <table>
+        <thead><tr><th>Criterio</th><th>Base</th><th>Intermedio</th><th>Avanzato</th><th>Eccellente</th></tr></thead>
+        <tbody>
+          <tr><td>Sistemi operativi e software</td><td>Esempi comuni.</td><td>Distingue OS/app.</td><td>Kernel/driver/memoria corretti.</td><td>Argomenta collegando teoria‑pratica.</td></tr>
+          <tr><td>Reti e protocolli</td><td>Connette computer.</td><td>Protocolli/indirizzi comuni.</td><td>DNS/IPv4/HTTPS con casi.</td><td>Analizza e confronta protocolli.</td></tr>
+          <tr><td>Basi di dati</td><td>Tabelle/campi.</td><td>Chiavi e SQL semplici.</td><td>Join e query complesse.</td><td>Progettazione schemi con vincoli.</td></tr>
+          <tr><td>Algoritmi e complessità</td><td>Procedure base.</td><td>Classificazioni semplici.</td><td>Ricorsione e ottimizzazione.</td><td>Valutazione complessità avanzata.</td></tr>
+          <tr><td>Sicurezza e privacy</td><td>Password/risti comuni.</td><td>Password robuste, phishing base.</td><td>2FA, crypto base, buone pratiche.</td><td>Analisi scenari e policy.</td></tr>
+        </tbody>
+      </table>
+      <p class="muted">Le griglie sono adattabili a verifiche formative e sommative; si consiglia descrittività e esempi.</p>
+    </section>
   </main>
 </body>
 </html>
