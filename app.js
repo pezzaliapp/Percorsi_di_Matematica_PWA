@@ -65,36 +65,67 @@
   function genICTSearchOps(){ return makeBank('ICT: ricerca avanzata',[
     {p:'Quale operatore esclude un termine?', a:'-', o:['-','+','?','~']},
     {p:'Quale operatore richiede entrambe le parole?', a:'AND', o:['AND','OR','NEAR','XOR']},
-    {p:'Con quale operatore cerchi almeno uno dei termini?', a:'OR', o:['OR','AND','NOT','NEAR']}
+    {p:'Con quale operatore cerchi almeno uno dei termini?', a:'OR', o:['OR','AND','NOT','NEAR']},
+    {p:'Cosa fanno le virgolette "…"?', a:'Cercano la frase esatta', o:['Cercano la frase esatta','Aggiungono sinonimi','Ordinano per data','Traducono il testo']},
+    {p:'Che cosa indica il lucchetto accanto all’URL?', a:'Connessione sicura (HTTPS)', o:['Connessione sicura (HTTPS)','Pagina con cookie','Pagina salvata','Pubblicità attiva']},
+    {p:'Che cos’è una “fonte primaria”?', a:'La fonte originale del dato', o:['La fonte originale del dato','Un blog che riporta la notizia','Un social','Un motore di ricerca']},
+    {p:'Che cosa controlli per stimare l’affidabilità?', a:'Autore, data, citazioni', o:['Autore, data, citazioni','Numero di immagini','Colore del sito','Lunghezza del testo']},
+    {p:'La stringa site:.gov cosa fa?', a:'Limita la ricerca ai domini .gov', o:['Limita la ricerca ai domini .gov','Traduce in inglese','Cerca nei social','Rimuove la pubblicità']},
+    {p:'Il parametro filetype:pdf cosa fa?', a:'Cerca solo file PDF', o:['Cerca solo file PDF','Cerca immagini','Blocca i video','Apre il Cestino']}
   ]); }
   function genICT2FA(){ return makeBank('ICT: sicurezza (2FA)',[
-    {p:'La 2FA serve a…', a:'Aumentare la sicurezza', o:['Aumentare la sicurezza','Navigare più veloce','Bloccare pubblicità','Salvare password']},
-    {p:'Un esempio di 2FA è…', a:'Codice OTP via app', o:['Codice OTP via app','Emoji nel nome','Password breve','Condivisione password']}
+    {p:'La 2FA serve a…', a:'Aumentare la sicurezza', o:['Aumentare la sicurezza','Velocizzare internet','Bloccare pubblicità','Fare backup']},
+    {p:'Un esempio di 2FA è…', a:'Codice OTP via app', o:['Codice OTP via app','Emoji nel nome','Password breve','Condivisione password']},
+    {p:'Cos’è un OTP?', a:'Un codice monouso a tempo', o:['Un codice monouso a tempo','Una password fissa','Una mail di conferma','Un nickname']},
+    {p:'Qual è la password più robusta?', a:'Lunga + lettere/numeri/simboli', o:['Lunga + lettere/numeri/simboli','NomeCane2024','123456','qwerty']},
+    {p:'Dove NON salvare le password?', a:'Post-it sul PC', o:['Post-it sul PC','Gestore password','Memoria cifrata','Chiave hardware']},
+    {p:'Cos’è il phishing?', a:'Tentativo di furto credenziali con messaggi ingannevoli', o:['Tentativo di furto credenziali con messaggi ingannevoli','Backup online','Firma digitale','Firewall hardware']},
+    {p:'Che cos’è la smishing?', a:'Phishing via SMS', o:['Phishing via SMS','Backup su chiavetta','Copia-incolla','Anonimato online']},
+    {p:'Come riconosci un’email sospetta?', a:'Link strani, urgenza, errori', o:['Link strani, urgenza, errori','Logo perfetto','Allegato PNG','Messaggio breve']},
+    {p:'Qual è una buona pratica con i link?', a:'Passare il mouse e controllare l’URL', o:['Passare il mouse e controllare l’URL','Cliccare subito','Rispondere con dati','Inoltrare agli amici']}
   ]); }
   function genCS_OSvsSW(){ return makeBank('ICT: OS vs SW',[
-    {p:'Il kernel appartiene a…', a:'Sistema operativo', o:['Sistema operatico','Applicazione','Firmware','Driver video']},
-    {p:'Un driver è…', a:'Software che controlla l’hardware', o:['Software che controlla l’hardware','Memoria di massa','Tipo di processore','Rete privata']},
-    {p:'La RAM è…', a:'Memoria di lavoro volatile', o:['Memoria di lavoro volatile','Archivio permanente','Un programma','Periferica di rete']}
+    {p:'Il kernel appartiene a…', a:'Sistema operativo', o:['Sistema operativo','Applicazione','Firmware del router','Driver video']},
+    {p:'Un driver è…', a:'Software che controlla l’hardware', o:['Software che controlla l’hardware','Un tipo di CPU','Un file compresso','Un cavo di rete']},
+    {p:'La RAM è…', a:'Memoria di lavoro volatile', o:['Memoria di lavoro volatile','Archivio permanente','Una stampante','Un protocollo web']},
+    {p:'Esempio di sistema operativo', a:'Linux', o:['Linux','PowerPoint','Chrome.exe','PDF']},
+    {p:'Esempio di software applicativo', a:'Foglio di calcolo', o:['Foglio di calcolo','BIOS','Scheduler del kernel','Router']},
+    {p:'Aggiornamenti di sicurezza servono a…', a:'Correggere vulnerabilità note', o:['Correggere vulnerabilità note','Aggiungere pubblicità','Cambiare provider','Formattare il disco']},
+    {p:'Il file system si occupa di…', a:'Organizzare file e cartelle', o:['Organizzare file e cartelle','Disegnare grafici','Aumentare la RAM','Criptare l’HTTPS']}
   ]); }
   function genCS_NetworksLiceo(){ return makeBank('ICT: reti/protocolli',[
     {p:'HTTPS usa tipicamente la porta…', a:'443', o:['443','80','21','25']},
     {p:'Il DNS serve a…', a:'Risoluzione dei nomi in indirizzi IP', o:['Risoluzione dei nomi in indirizzi IP','Criptare i file','Comprimere immagini','Bilanciare il carico']},
     {p:'Un indirizzo IPv4 è del tipo…', a:'192.168.1.10', o:['192.168.1.10','300.500.1.1','AB:CD:EF:12:34','www.esempio.it']}
   ]); }
-  function genCS_DBConcepts(){ return makeBank('ICT: database',[
-    {p:'In un database relazionale, una riga si chiama…', a:'Tupla/record', o:['Tupla/record','Chiave esterna','Indice','Vista']},
-    {p:'La chiave primaria serve a…', a:'Identificare univocamente i record', o:['Identificare univocamente i record','Criptare i dati','Descrivere il dominio','Unire due tabelle']},
-    {p:'SQL è…', a:'Un linguaggio per interrogare database', o:['Un linguaggio per interrogare database','Sistema operativo','Protocollo di rete','Formato immagine']}
+  function genCS_DBConcepts(){ return makeBank('ICT: basi di dati (concetti)',[
+    {p:'Che cos’è una tabella?', a:'Una raccolta di record', o:['Una raccolta di record','Un file PDF','Una cartella','Una query SQL']},
+    {p:'Cos’è una chiave primaria?', a:'Identifica univocamente i record', o:['Identifica univocamente i record','Un formato immagine','Una password','Un indirizzo IP']},
+    {p:'SQL: SELECT * FROM studenti significa…', a:'Seleziona tutte le colonne di studenti', o:['Seleziona tutte le colonne di studenti','Cancella la tabella','Crea una tabella','Ordina per cognome']},
+    {p:'Relazione 1:N indica…', a:'Un record collegato a molti', o:['Un record collegato a molti','Molti-a-molti','Zero-a-uno','Solo uno-a-uno']},
+    {p:'Cos’è un indice?', a:'Struttura per velocizzare le query', o:['Struttura per velocizzare le query','Backup incrementale','Licenza d’uso','Formato CSV']},
+    {p:'Che cos’è una view?', a:'Risultato salvato di una query', o:['Risultato salvato di una query','Una cartella condivisa','Un’immagine','Un driver di rete']},
+    {p:'ACID: la C sta per…', a:'Consistency', o:['Consistency','Connectivity','Compression','Cryptography']}
   ]); }
   function genCS_AlgoComplex(){ return makeBank('ICT: algoritmi/complessità',[
-    {p:'Un algoritmo in O(n) ha complessità…', a:'Lineare', o:['Lineare','Costante','Quadratica','Esponenziale']},
-    {p:'La ricorsione è…', a:'Una funzione che richiama se stessa', o:['Una funzione che richiama se stessa','Variabile','Tabella database','Rete privata']},
-    {p:'La ricerca binaria è…', a:'O(log n)', o:['O(log n)','O(n)','O(1)','O(n!)']}
+    {p:'Un algoritmo è…', a:'Una procedura finita per risolvere un problema', o:['Una procedura finita per risolvere un problema','Un linguaggio','Un file','Una variabile']},
+    {p:'Big-O di una ricerca lineare?', a:'O(n)', o:['O(n)','O(1)','O(n log n)','O(n^2)']},
+    {p:'Big-O di una ricerca binaria?', a:'O(log n)', o:['O(log n)','O(1)','O(n)','O(n^2)']},
+    {p:'Un grafo è composto da…', a:'Nodi e archi', o:['Nodi e archi','Array e stringhe','File e cartelle','Classi e oggetti']},
+    {p:'Il “pseudocodice” serve a…', a:'Descrivere algoritmi in modo comprensibile', o:['Descrivere algoritmi in modo comprensibile','Criptare dati','Eseguire direttamente','Disegnare immagini']},
+    {p:'Complesso quadratico indica…', a:'Tempo proporzionale a n^2', o:['Tempo proporzionale a n^2','Tempo costante','Spazio costante','Tempo logaritmico']},
+    {p:'Un ciclo “while” esegue…', a:'Finché la condizione è vera', o:['Finché la condizione è vera','Un numero fisso di volte','Una sola volta','Mai']}
   ]); }
   function genCS_SecurityAdv(){ return makeBank('ICT: sicurezza avanzata',[
     {p:'Il phishing è…', a:'Tentativo di furto credenziali con messaggi ingannevoli', o:['Tentativo di furto credenziali con messaggi ingannevoli','Backup online','Firma digitale','Firewall hardware']},
     {p:'Autenticazione forte: esempio', a:'Biometria o token hardware', o:['Biometria o token hardware','Password breve','Cookie pubblicitari','Screenshot di conferma']},
-    {p:'La crittografia serve a…', a:'Proteggere la confidenzialità dei dati', o:['Proteggere la confidenzialità dei dati','Velocizzare la rete','Comprimere immagini','Stampare documenti']}
+    {p:'La crittografia serve a…', a:'Proteggere la confidenzialità dei dati', o:['Proteggere la confidenzialità dei dati','Velocizzare la rete','Comprimere immagini','Stampare documenti']},
+    {p:'Esempio di dato personale', a:'Indirizzo e-mail', o:['Indirizzo e-mail','Logo del sito','Colore preferito','Font usato']},
+    {p:'HTTPS protegge…', a:'Dati in transito client-server', o:['Dati in transito client-server','File nel disco locale','Batteria del telefono','Qualità del Wi-Fi']},
+    {p:'Un backup 3-2-1 prevede…', a:'3 copie, 2 supporti, 1 fuori sede', o:['3 copie, 2 supporti, 1 fuori sede','1 copia su chiavetta','Solo cloud','Solo NAS']},
+    {p:'GDPR: il consenso deve essere…', a:'Libero, specifico, informato', o:['Libero, specifico, informato','Implicito','Orale','Una spunta predefinita']},
+    {p:'Che cos’è la MFA?', a:'Autenticazione a più fattori', o:['Autenticazione a più fattori','Firewall avanzato','Antivirus cloud','VPN veloce']},
+    {p:'La “sicurezza per design” significa…', a:'Pensare alla sicurezza fin dall’inizio', o:['Pensare alla sicurezza fin dall’inizio','Aggiungere password alla fine','Solo policy cartacee','Nessun test']}
   ]); }
 
   // Legends for paths
