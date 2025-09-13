@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caccia ai Numeri — PWA v4</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="theme-color" content="#0b5fff">
+  <meta name="description" content="Gioco didattico per classe seconda (PWA).">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="statusBar" class="status" style="display:none">
+    Modalita LIM ATTIVA — <button id="updateBtn" class="secondary">Aggiorna App</button>
+  </div>
+
+  <header>
+    <h1>🧙‍♂️ Caccia ai Numeri — PWA v4</h1>
+    <div class="header-actions">
+      <a id="guideBtn" class="secondary" href="readme.html" target="_blank" style="text-decoration:none;display:inline-block;padding:10px 14px;border-radius:10px">Guida</a>
+      <a class="secondary" href="indicazioni.html" target="_blank">Indicazioni nazionali</a>
+      <button id="limBtn" class="secondary" type="button">Modalita LIM</button>
+      <button id="installBtn" hidden>Installa App</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="intro" class="card">
+      <h2>Classe seconda elementare</h2>
+      <p>Giochi inclusi: addizioni con cambio, sottrazioni con prestito, tabelline 2/5/10, geometria base.</p>
+      <label>Percorso:
+        <select id="percorso">
+          <option value="mix" selected>Mix guidato</option>
+          <option value="add">Addizioni con cambio</option>
+          <option value="sub">Sottrazioni con prestito</option>
+          <option value="tab">Tabelline 2/5/10</option>
+          <option value="geo">Geometria base</option>
+        </select>
+      </label>
+      <div class="actions">
+        <button id="playBtn" class="primary" type="button">Inizia l'avventura</button>
+        <button id="howBtn" class="secondary" type="button">Come si gioca</button>
+      </div>
+    </section>
+
+    <section id="howto" class="card hidden">
+      <h2>Come si gioca</h2>
+      <ul>
+        <li>Tocca la risposta giusta per aprire la porta.</li>
+        <li>Ogni risposta corretta vale una stella.</li>
+        <li>Modalita LIM: testi e pulsanti piu grandi (senza fullscreen).</li>
+      </ul>
+      <button class="secondary" id="backIntro" type="button">Torna</button>
+    </section>
+
+    <section id="game" class="card hidden">
+      <div class="hud">
+        <div>Livello: <span id="levelName"></span></div>
+        <div>Stelle: <span id="stars">0</span></div>
+        <div>Progresso: <span id="progress">0</span>/<span id="total">0</span></div>
+      </div>
+
+      <div id="prompt" class="prompt"></div>
+      <div id="choices" class="choices"></div>
+
+      <div class="actions">
+        <button id="menuBtn" class="secondary" type="button">Menu</button>
+        <button id="skipBtn" class="secondary" type="button">Salta (-0.5)</button>
+        <button id="nextBtn" class="primary hidden" type="button">Prossima porta</button>
+      </div>
+    </section>
+
+    <section id="summary" class="card hidden">
+      <h2>Missione completata!</h2>
+      <p>Stelle raccolte: <strong id="finalStars"></strong></p>
+      <p id="feedback"></p>
+      <div class="actions">
+        <button id="againBtn" class="primary" type="button">Rigioca</button>
+        <button id="homeBtn" class="secondary" type="button">Menu</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>© 2025 PezzaliAPP — PWA educativa.</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
