@@ -1,42 +1,31 @@
+
 (function(){
   function $(id){return document.getElementById(id);} 
   function on(el,ev,fn){if(el&&el.addEventListener)el.addEventListener(ev,fn);}
   function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
   function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
 
-  // ===== Anti-duplicati robusto con rotazione =====
-  var seenQ = new Set();
-  function resetSeen(){ seenQ.clear(); }
-  function __normPrompt(s){
-    return String(s||"").toLowerCase()
-      .replace(/[.\u2026]+$/g,"")   // rimuove puntini/ellissi finali
-      .replace(/\s+/g," ")          // comprime spazi
-      .trim();
-  }
+  // ===== Normalizzazione e anti-duplicati =====
+  function norm(s){return String(s||"").toLowerCase().replace(/[.\u2026]+$/g,"").replace(/\s+/g," ").trim();}
+
+  // ===== makeBank con rotazione interna (ma NON ripete nella stessa partita grazie al deck) =====
   function makeBank(name, items){
-    // ordine casuale ciclico per questo banco
-    var order = items.map(function(_,i){return i;});
-    order = shuffle(order.slice());
+    var order = items.map(function(_,i){return i;}); order = shuffle(order.slice());
     var idx = 0, lastKey = null;
     return function(){
-      if (idx >= order.length) { order = shuffle(order.slice()); idx = 0; }
+      if (idx >= order.length){ order = shuffle(order.slice()); idx=0; }
       var cand = items[ order[idx++] ];
-      var key  = __normPrompt(cand.p);
-      // evita ripetizione immediata
-      if (lastKey && key===lastKey && order.length>1){
-        cand = items[ order[idx % order.length] ];
-        idx++;
-        key = __normPrompt(cand.p);
+      var key  = norm(cand.p);
+      if(lastKey && key===lastKey && order.length>1){
+        cand = items[ order[idx % order.length] ]; idx++; key = norm(cand.p);
       }
       lastKey = key;
-      // anti-duplicato globale (stessa partita)
-      if (!seenQ.has(key)) seenQ.add(key);
       var o=cand.o.slice(); shuffle(o);
       return {prompt:cand.p, choices:o, correct:o.indexOf(cand.a)};
     };
   }
 
-  // ===== Generatori Matematica =====
+  // ===== Generatori Matematica (come prima) =====
   function makeAddRange(minA,maxA,minB,maxB){ 
     return function(){ 
       var x=rand(minA,maxA), y=rand(minB,maxB), r=x+y; 
@@ -171,12 +160,21 @@
     }; 
   }
 
-  // ===== Banche Informatica (estese dove serviva) =====
+  // ===== Banche Informatica (tutte 12–15 item) =====
+
   function genInfoMouseKeyboard(){ return makeBank('ICT: mouse/tastiera',[
     {p:'Quale dispositivo muove il puntatore?', a:'Mouse', o:['Mouse','Tastiera','Monitor','Stampante']},
     {p:'Quale tasto crea uno spazio?', a:'Barra spaziatrice', o:['Barra spaziatrice','Invio','Shift','Esc']},
     {p:'Il tasto SHIFT serve per...', a:'Scrivere maiuscole e simboli', o:['Scrivere maiuscole e simboli','Spegnere il PC','Spostare file','Aprire la posta']},
-    {p:'Il tasto INVIO serve per...', a:'Andare a capo o confermare', o:['Andare a capo o confermare','Cancellare caratteri','Spegnere lo schermo','Aprire il browser']}
+    {p:'Il tasto INVIO serve per...', a:'Andare a capo o confermare', o:['Andare a capo o confermare','Cancellare caratteri','Spegnere lo schermo','Aprire il browser']},
+    {p:'Il doppio clic serve a...', a:'Aprire file o cartelle', o:['Aprire file o cartelle','Spegnere il PC','Cambiare lingua','Stampare velocemente']},
+    {p:'Il tasto ESC di solito...', a:'Annulla o chiude una finestra', o:['Annulla o chiude una finestra','Salva il file','Spegne il monitor','Cambia sfondo']},
+    {p:'La rotella del mouse...', a:'Serve per lo scorrimento', o:['Serve per lo scorrimento','Apre il menù Start','Aumenta il volume','Blocca la tastiera']},
+    {p:'CTRL+C di solito...', a:'Copia', o:['Copia','Incolla','Taglia','Salva']},
+    {p:'CTRL+V di solito...', a:'Incolla', o:['Incolla','Copia','Taglia','Stampa']},
+    {p:'CTRL+Z di solito...', a:'Annulla', o:['Annulla','Ripeti','Salva','Cerca']},
+    {p:'La barra spaziatrice...', a:'Inserisce uno spazio', o:['Inserisce uno spazio','Cancella testo','Spegne il PC','Apre il browser']},
+    {p:'La tastiera è...', a:'Una periferica di input', o:['Una periferica di input','Un’app','Un driver','Un file system']}
   ]); }
 
   function genInfoHwSwBasics(){ return makeBank('ICT: hardware/software (base)',[
@@ -191,7 +189,10 @@
     {p:'La memoria di massa è...', a:'SSD/HDD', o:['SSD/HDD','RAM','CPU','Scheda madre']},
     {p:'Il mouse è...', a:'Dispositivo di puntamento (hardware)', o:['Dispositivo di puntamento (hardware)','Programma','File PDF','Password']},
     {p:'La scheda video (GPU) è...', a:'Hardware per l’output grafico', o:['Hardware per l’output grafico','Un sistema operativo','Un antivirus','Una rete Wi‑Fi']},
-    {p:'Il browser è...', a:'Un software per navigare sul web', o:['Un software per navigare sul web','Una periferica','Un cavo','Una stampante']}
+    {p:'Il browser è...', a:'Un software per navigare sul web', o:['Un software per navigare sul web','Una periferica','Un cavo','Una stampante']},
+    {p:'Il case/armadio del PC contiene...', a:'I principali componenti hardware', o:['I principali componenti hardware','Solo il monitor','Solo il mouse','Solo la tastiera']},
+    {p:'Un’app è...', a:'Software applicativo', o:['Software applicativo','Periferica','Driver','Cavo USB']},
+    {p:'Il driver è...', a:'Software che dialoga con l’hardware', o:['Software che dialoga con l’hardware','Un antivirus','Una RAM','Un SSD']}
   ]); }
 
   function genInfoFiles(){ return makeBank('ICT: file/cartelle',[
@@ -214,19 +215,46 @@
   function genInfoBlocks(){ return makeBank('ICT: coding a blocchi',[
     {p:'"Ripeti 10 volte" è un…', a:'Ciclo (loop)', o:['Ciclo (loop)','Evento','Variabile','Immagine']},
     {p:'"Se … allora" serve per…', a:'Prendere decisioni', o:['Prendere decisioni','Disegnare','Salvare file','Aumentare il volume']},
-    {p:'Una variabile è…', a:'Un contenitore di valori', o:['Un contenitore di valori','Una figura','Un suono','Una cartella']}
+    {p:'Una variabile è…', a:'Un contenitore di valori', o:['Un contenitore di valori','Una figura','Un suono','Una cartella']},
+    {p:'Un evento in un ambiente a blocchi è…', a:'Un’azione che fa partire uno script', o:['Un’azione che fa partire uno script','Una cartella','Una password','Una GPU']},
+    {p:'Il debugging è…', a:'La correzione degli errori', o:['La correzione degli errori','La stampa su carta','La cancellazione file','La compressione']},
+    {p:'Uno sprite è…', a:'Un personaggio/oggetto grafico', o:['Un personaggio/oggetto grafico','Un file ZIP','Un driver','Un antivirus']},
+    {p:'Un ciclo “fino a quando” …', a:'Ripete finché la condizione è vera', o:['Ripete finché la condizione è vera','Esegue una sola volta','Cancella variabili','Spegne il PC']},
+    {p:'La sequenza è…', a:'Ordine dei blocchi da eseguire', o:['Ordine dei blocchi da eseguire','Nome del progetto','Formato immagine','Password']},
+    {p:'La condizione è…', a:'Un controllo vero/falso', o:['Un controllo vero/falso','Un driver','Una GPU','Un PDF']},
+    {p:'La variabile “contatore” …', a:'Tiene il numero di ripetizioni', o:['Tiene il numero di ripetizioni','Cambia il colore','Apre il browser','Cifra i dati']},
+    {p:'Il blocco “attendi 1 sec” …', a:'Inserisce una pausa', o:['Inserisce una pausa','Chiude il progetto','Crea una cartella','Spegne il display']},
+    {p:'Il blocco “mostra” …', a:'Rende visibile lo sprite', o:['Rende visibile lo sprite','Cancella il file','Riduce la RAM','Crea un PDF']}
   ]); }
 
   function genInfoPasswords(){ return makeBank('ICT: password (base)',[
     {p:'Quale password è più sicura?', a:'Una lunga con lettere, numeri e simboli', o:['Una lunga con lettere, numeri e simboli','123456','nome+cognome','password']},
     {p:'È consigliato…', a:'Usare password diverse per i servizi', o:['Usare password diverse per i servizi','Scrivere la password sul banco','Condividerla con gli amici','Riutilizzare sempre la stessa']},
-    {p:'Per ricordare le password è utile…', a:'Un gestore di password affidabile', o:['Un gestore di password affidabile','Inviare password via chat','Post‑it sul PC','Usare sempre la stessa']}
+    {p:'Per ricordare le password è utile…', a:'Un gestore di password affidabile', o:['Un gestore di password affidabile','Inviare password via chat','Post‑it sul PC','Usare sempre la stessa']},
+    {p:'Password con solo lettere minuscole…', a:'Sono deboli', o:['Sono deboli','Sono fortissime','Impossibili da ricordare','Sempre accettate']},
+    {p:'Meglio attivare…', a:'L’autenticazione a due fattori', o:['L’autenticazione a due fattori','La modalità aereo','Lo screensaver con foto','La luminosità massima']},
+    {p:'Non condividere password…', a:'Nemmeno con amici', o:['Nemmeno con amici','Solo con compagni','Solo via chat','Sul diario']},
+    {p:'Le password vanno…', a:'Aggiornate periodicamente', o:['Aggiornate periodicamente','Scritte sulla tastiera','Invitate via email','Usate ovunque uguali']},
+    {p:'Le domande di sicurezza…', a:'Vanno scelte non banali', o:['Vanno scelte non banali','Devono essere sempre “nome cane”','Si possono saltare','Si scrivono sui social']},
+    {p:'Un passphrase è…', a:'Una frase lunga facile da ricordare', o:['Una frase lunga facile da ricordare','Un PDF','Un virus','Un driver']},
+    {p:'Un gestore di password…', a:'Memorizza e compila credenziali', o:['Memorizza e compila credenziali','Aggiunge RAM','Stampa documenti','Installa driver']},
+    {p:'Le password nelle note del telefono…', a:'Meglio evitarlo, usa un gestore', o:['Meglio evitarlo, usa un gestore','È la pratica migliore','Postarle su social','Inviare per chat']},
+    {p:'Il simbolo “@” nelle password…', a:'Può aumentare la robustezza', o:['Può aumentare la robustezza','È vietato','Riduce la sicurezza','Blocca gli accessi']}
   ]); }
 
   function genInfoNet(){ return makeBank('ICT: internet/ricerca',[
     {p:'Un browser serve per…', a:'Navigare su internet', o:['Navigare su internet','Stampare','Disegnare','Presentazioni']},
     {p:'Per cercare una frase esatta si usano…', a:'Le virgolette " "', o:['Le virgolette " "','Il cancelletto #','Le parentesi ()','L’asterisco *']},
-    {p:'Il lucchetto accanto all’URL indica…', a:'Connessione sicura (HTTPS)', o:['Connessione sicura (HTTPS)','Volume alto','Batteria carica','Download completato']}
+    {p:'Il lucchetto accanto all’URL indica…', a:'Connessione sicura (HTTPS)', o:['Connessione sicura (HTTPS)','Volume alto','Batteria carica','Download completato']},
+    {p:'Per aprire un link in una nuova scheda…', a:'Click con tasto centrale/CTRL+click', o:['Click con tasto centrale/CTRL+click','Doppio click sullo sfondo','Trascina sul desktop','Premi Esc']},
+    {p:'La cronologia del browser…', a:'Elenca i siti visitati', o:['Elenca i siti visitati','Mostra le password','Aumenta la RAM','Blocca i pop‑up']},
+    {p:'La cache del browser…', a:'Memorizza file per velocizzare', o:['Memorizza file per velocizzare','Cripta i PDF','Stampa a colori','Spegne il Wi‑Fi']},
+    {p:'HTTPS rispetto a HTTP…', a:'Cifra il traffico', o:['Cifra il traffico','Riduce la batteria a zero','Aumenta la RAM','Impedisce internet']},
+    {p:'I cookie sono…', a:'Dati salvati dal sito sul browser', o:['Dati salvati dal sito sul browser','Virus','Password','Immagini']},
+    {p:'La modalità in incognito…', a:'Non salva cronologia locale', o:['Non salva cronologia locale','Cripta sempre tutto','Blocca i virus','Accelera la rete']},
+    {p:'Un motore di ricerca è…', a:'Un servizio che indicizza pagine web', o:['Un servizio che indicizza pagine web','Una GPU','Un file ZIP','Un antivirus']},
+    {p:'Il risultato “annuncio” è…', a:'Un link sponsorizzato', o:['Un link sponsorizzato','Sempre il migliore','Un virus','Un driver']},
+    {p:'Per cercare immagini…', a:'Usa la scheda Immagini del motore', o:['Usa la scheda Immagini del motore','Apri il task manager','Cambia lingua di sistema','Spegni il PC']}
   ]); }
 
   function genICTSearchOps(){ return makeBank('ICT: ricerca avanzata',[
@@ -237,7 +265,11 @@
     {p:'Cosa fa l’operatore site:edu?', a:'Limita la ricerca a domini .edu', o:['Limita la ricerca a domini .edu','Mostra solo PDF','Ordina per data','Mostra immagini']},
     {p:'Che effetto ha filetype:pdf?', a:'Cerca solo file PDF', o:['Cerca solo file PDF','Blocca i link','Mostra mappe','Traduce risultati']},
     {p:'Cosa fa -parola?', a:'Esclude la parola dai risultati', o:['Esclude la parola dai risultati','Aggiunge una parola','Sostituisce la parola','Evidenzia la parola']},
-    {p:'A cosa serve OR?', a:'A trovare almeno uno dei termini', o:['A trovare almeno uno dei termini','A trovare entrambi i termini','A escludere termini','A cercare frasi esatte']}
+    {p:'A cosa serve OR?', a:'A trovare almeno uno dei termini', o:['A trovare almeno uno dei termini','A trovare entrambi i termini','A escludere termini','A cercare frasi esatte']},
+    {p:'L’operatore site:gov…', a:'Limita a siti governativi', o:['Limita a siti governativi','Mostra solo video','Scarica PDF','Traduce siti']},
+    {p:'L’operatore intitle:…', a:'Cerca una parola nel titolo della pagina', o:['Cerca una parola nel titolo della pagina','Esclude parole dal testo','Filtra per lingua','Apre risultati in nuova scheda']},
+    {p:'L’operatore related:…', a:'Mostra siti simili a un URL', o:['Mostra siti simili a un URL','Mostra solo siti vecchi','Blocca i risultati','Traduce il sito']},
+    {p:'L’operatore site:it…', a:'Limita a domini italiani', o:['Limita a domini italiani','Cerca solo in inglese','Scarica immagini','Mostra mappe']}
   ]); }
 
   function genICT2FA(){ return makeBank('ICT: sicurezza (2FA)',[
@@ -248,7 +280,11 @@
     {p:'Autenticazione forte: esempio', a:'Token hardware o biometria', o:['Token hardware o biometria','SMS non protetto','Domanda segreta banale','Memo su post‑it']},
     {p:'Evita truffe online…', a:'Verifica mittente e URL prima di cliccare', o:['Verifica mittente e URL prima di cliccare','Apri subito gli allegati','Inserisci credenziali ovunque','Disattiva l’antivirus']},
     {p:'Backup delle OTP…', a:'Conservare i codici di emergenza', o:['Conservare i codici di emergenza','Condividerli via chat','Postarli sui social','Memorizzarli in chiaro']},
-    {p:'App 2FA vs SMS…', a:'L’app è più sicura dell’SMS', o:['L’app è più sicura dell’SMS','Sono equivalenti','SMS è sempre migliore','Meglio nessuna 2FA']}
+    {p:'App 2FA vs SMS…', a:'L’app è più sicura dell’SMS', o:['L’app è più sicura dell’SMS','Sono equivalenti','SMS è sempre migliore','Meglio nessuna 2FA']},
+    {p:'Un TOTP…', a:'È un codice temporaneo basato sul tempo', o:['È un codice temporaneo basato sul tempo','È un driver video','È un file immagine','È un PDF']},
+    {p:'Perdere il telefono con 2FA…', a:'Usa i codici di recupero', o:['Usa i codici di recupero','Non si può più accedere','Scrivi al caso','Spegni il router']},
+    {p:'Push notification 2FA…', a:'Richiede approvazione su app', o:['Richiede approvazione su app','È un SMS','È una email','È una chiamata']},
+    {p:'Passkey…', a:'Autenticazione senza password basata su chiavi', o:['Autenticazione senza password basata su chiavi','Un PDF protetto','Un antivirus','Una VPN']}
   ]); }
 
   function genCS_OSvsSW(){ return makeBank('ICT: OS vs SW',[
@@ -263,25 +299,55 @@
     {p:'La GPU è…', a:'Hardware che elabora grafica', o:['Hardware che elabora grafica','Un sistema operativo','Un file system','Un router casalingo']},
     {p:'La shell è…', a:'Interfaccia per impartire comandi', o:['Interfaccia per impartire comandi','Una periferica di stampa','Un antivirus','Un browser']},
     {p:'Lo scheduler del kernel gestisce…', a:'L’uso della CPU tra i processi', o:['L’uso della CPU tra i processi','La risoluzione dello schermo','Il volume audio','Il colore del desktop']},
-    {p:'Il task manager/monitor di sistema serve a…', a:'Vedere e gestire i processi attivi', o:['Vedere e gestire i processi attivi','Modificare i driver video','Formattare il disco fisso','Cambiare provider Internet']}
+    {p:'Il task manager/monitor di sistema serve a…', a:'Vedere e gestire i processi attivi', o:['Vedere e gestire i processi attivi','Modificare i driver video','Formattare il disco fisso','Cambiare provider Internet']},
+    {p:'Un processo è…', a:'Un programma in esecuzione', o:['Un programma in esecuzione','Un file immagine','Una cartella','Un protocollo di rete']},
+    {p:'La memoria virtuale serve a…', a:'Estendere la RAM su disco', o:['Estendere la RAM su disco','Aumentare la GPU','Cancellare virus','Comprimere PDF']},
+    {p:'Un servizio (daemon)…', a:'È un processo in background', o:['È un processo in background','È un cavo HDMI','È un file ZIP','È una rete Wi‑Fi']}
   ]); }
 
   function genCS_NetworksLiceo(){ return makeBank('ICT: reti/protocolli',[
     {p:'HTTPS usa tipicamente la porta…', a:'443', o:['443','80','21','25']},
     {p:'Il DNS serve a…', a:'Risoluzione dei nomi in indirizzi IP', o:['Risoluzione dei nomi in indirizzi IP','Criptare i file','Comprimere immagini','Bilanciare il carico']},
-    {p:'Un indirizzo IPv4 è del tipo…', a:'192.168.1.10', o:['192.168.1.10','300.500.1.1','AB:CD:EF:12:34','www.esempio.it']}
+    {p:'Un indirizzo IPv4 è del tipo…', a:'192.168.1.10', o:['192.168.1.10','300.500.1.1','AB:CD:EF:12:34','www.esempio.it']},
+    {p:'Il protocollo SMTP si usa per…', a:'Inviare email', o:['Inviare email','Scaricare pagine web','Trasferire file','Streaming video']},
+    {p:'Il protocollo IMAP si usa per…', a:'Leggere email su server', o:['Leggere email su server','Inviare email','Videochiamate','Stampa di rete']},
+    {p:'La porta 80 è tipica di…', a:'HTTP', o:['HTTP','FTP','SSH','SMTP']},
+    {p:'La porta 22 è tipica di…', a:'SSH', o:['SSH','HTTP','DNS','IMAP']},
+    {p:'NAT serve a…', a:'Tradurre indirizzi privati/pubblici', o:['Tradurre indirizzi privati/pubblici','Cifrare dischi','Disegnare grafici','Fare backup']},
+    {p:'Un indirizzo IPv6 ha…', a:'Formato esadecimale con due punti', o:['Formato esadecimale con due punti','Solo numeri e punti','Solo lettere','È un file']},
+    {p:'Ping serve a…', a:'Verificare raggiungibilità di un host', o:['Verificare raggiungibilità di un host','Cifrare dati','Disegnare','Gestire file']},
+    {p:'Una subnet mask…', a:'Definisce la rete e gli host', o:['Definisce la rete e gli host','Cambia la password','Aumenta la RAM','Stampa documenti']},
+    {p:'FTP usa di solito…', a:'Porta 21', o:['Porta 21','Porta 80','Porta 110','Porta 53']}
   ]); }
 
   function genCS_DBConcepts(){ return makeBank('ICT: database',[
     {p:'In un database relazionale, una riga si chiama…', a:'Tupla/record', o:['Tupla/record','Chiave esterna','Indice','Vista']},
     {p:'La chiave primaria serve a…', a:'Identificare univocamente i record', o:['Identificare univocamente i record','Criptare i dati','Descrivere il dominio','Unire due tabelle']},
-    {p:'SQL è…', a:'Un linguaggio per interrogare database', o:['Un linguaggio per interrogare database','Sistema operativo','Protocollo di rete','Formato immagine']}
+    {p:'SQL è…', a:'Un linguaggio per interrogare database', o:['Un linguaggio per interrogare database','Sistema operativo','Protocollo di rete','Formato immagine']},
+    {p:'Una chiave esterna…', a:'Collega record tra tabelle', o:['Collega record tra tabelle','Cifra i dati','Stampa report','Blocca accessi']},
+    {p:'La normalizzazione serve a…', a:'Ridurre ridondanze', o:['Ridurre ridondanze','Aumentare RAM','Cifrare HDD','Fare backup']},
+    {p:'Una vista (view)…', a:'È una query salvata come tabella virtuale', o:['È una query salvata come tabella virtuale','È un driver','È una GPU','È un PDF']},
+    {p:'L’SQL SELECT…', a:'Recupera dati', o:['Recupera dati','Cancella tabelle','Installa driver','Cambia password']},
+    {p:'La clausola WHERE…', a:'Filtra le righe', o:['Filtra le righe','Ordina le colonne','Crea un indice','Crea una chiave primaria']},
+    {p:'L’SQL JOIN…', a:'Unisce tabelle correlate', o:['Unisce tabelle correlate','Cripta colonne','Spegne il server','Salva file']},
+    {p:'Un indice su una colonna…', a:'Accelera le ricerche', o:['Accelera le ricerche','Stampa PDF','Aumenta RAM','Riduce sicurezza']},
+    {p:'SQL INSERT serve a…', a:'Inserire nuove righe', o:['Inserire nuove righe','Eliminare tabelle','Avviare servizi','Cambiare tema']},
+    {p:'SQL UPDATE serve a…', a:'Modificare dati esistenti', o:['Modificare dati esistenti','Creare database','Spegnere DBMS','Stampare report']}
   ]); }
 
   function genCS_AlgoComplex(){ return makeBank('ICT: algoritmi/complessità',[
     {p:'Un algoritmo in O(n) ha complessità…', a:'Lineare', o:['Lineare','Costante','Quadratica','Esponenziale']},
     {p:'La ricorsione è…', a:'Una funzione che richiama se stessa', o:['Una funzione che richiama se stessa','Variabile','Tabella database','Rete privata']},
-    {p:'La ricerca binaria è…', a:'O(log n)', o:['O(log n)','O(n)','O(1)','O(n!)']}
+    {p:'La ricerca binaria è…', a:'O(log n)', o:['O(log n)','O(n)','O(1)','O(n!)']},
+    {p:'Un algoritmo in O(1)…', a:'Ha tempo costante', o:['Ha tempo costante','È impossibile','È sempre ricorsivo','È esponenziale']},
+    {p:'Un algoritmo in O(n^2)…', a:'Ha crescita quadratica', o:['Ha crescita quadratica','È costante','È logaritmico','È lineare']},
+    {p:'Il caso peggiore (worst‑case)…', a:'Tempo massimo richiesto', o:['Tempo massimo richiesto','Tempo medio','Tempo minimo','Tempo reale']},
+    {p:'Il caso medio (average‑case)…', a:'Tempo atteso medio', o:['Tempo atteso medio','Tempo minimo','Sempre massimo','Sempre zero']},
+    {p:'Il Big‑O misura…', a:'Come cresce il tempo/spazio con n', o:['Come cresce il tempo/spazio con n','La RAM fisica','La GPU','La rete']},
+    {p:'Il backtracking…', a:'Esplora e torna indietro se necessario', o:['Esplora e torna indietro se necessario','È un antivirus','È un driver','È una GUI']},
+    {p:'La memoization…', a:'Memorizza risultati per riuso', o:['Memorizza risultati per riuso','Cancella cache','Cripta dati','Stampa']},
+    {p:'La programmazione dinamica…', a:'Scompone problemi in sottoproblemi', o:['Scompone problemi in sottoproblemi','Disegna grafici','Cambia risoluzione','Gestisce reti']},
+    {p:'Una coda prioritaria…', a:'Estrae l’elemento con priorità maggiore', o:['Estrae l’elemento con priorità maggiore','È una coda casuale','È uno stack','È un array ordinato']}
   ]); }
 
   function genCS_SecurityAdv(){ return makeBank('ICT: sicurezza avanzata',[
@@ -305,7 +371,7 @@
     {p:'Il principio del minimo privilegio…', a:'Concede solo i permessi necessari', o:['Concede solo i permessi necessari','Concede tutti i permessi','Blocca gli account','Richiede password deboli']}
   ]); }
 
-  // ===== Legende =====
+  // ===== Legend =====
   function getLegendForPath(name){
     var m = {
       'Geometria: perimetro (piccoli)': 'Legenda: w = larghezza, h = altezza, P = 2*(w+h)',
@@ -327,24 +393,24 @@
       'Quadratica (radici — concetto)': 'Prodotto c/a e somma -b/a',
       'Trigonometria (angoli notevoli)': '0°, 30°, 45°, 60°, 90°',
       // Informatica
-      'Informatica: mouse e tastiera': 'Mouse = puntatore; Spazio; Invio',
-      'Informatica: hardware/software (base)': 'Hardware = parte fisica; Software = programmi',
-      'Informatica: file e cartelle': 'File e cartelle, estensioni',
-      'Informatica: coding a blocchi': 'Sequenze, cicli, condizioni',
-      'Informatica: password (base)': 'Password robuste e diverse',
-      'Informatica: Internet e ricerca': 'Virgolette e HTTPS',
+      'Informatica: mouse e tastiera': 'Tasti base, doppio clic, scorciatoie',
+      'Informatica: hardware/software (base)': 'Hardware vs software, OS, driver',
+      'Informatica: file e cartelle': 'Estensioni, percorsi, zip, cloud',
+      'Informatica: coding a blocchi': 'Sequenze, eventi, cicli, debug',
+      'Informatica: password (base)': 'Manager, 2FA, buone pratiche',
+      'Informatica: Internet e ricerca': 'HTTPS, cache, cookie, incognito',
       'Informatica: ricerca avanzata': 'AND, OR, -, site:, filetype:',
-      'Informatica: sicurezza (2FA)': 'Secondo fattore = più sicurezza',
-      'Informatica: sistemi operativi e software': 'Kernel, driver, file system',
-      'Informatica: reti e protocolli': 'DNS, HTTPS(443), IPv4',
-      'Informatica: basi di dati (concetti)': 'Record, chiavi, SQL',
-      'Informatica: algoritmi e complessità': 'O(1), O(n), O(log n)',
-      'Informatica: sicurezza e privacy (avanzato)': 'Phishing, 2FA, cifratura, backup'
+      'Informatica: sicurezza (2FA)': 'OTP, passkey, backup codici',
+      'Informatica: sistemi operativi e software': 'Kernel, processi, memoria',
+      'Informatica: reti e protocolli': 'DNS, porte note, ping, NAT',
+      'Informatica: basi di dati (concetti)': 'Record, chiavi, join, viste',
+      'Informatica: algoritmi/complessità': 'Big-O, ricorsione, DP',
+      'Informatica: sicurezza avanzata': 'Phishing, ransomware, Zero Trust'
     };
     return m[name] || '';
   }
 
-  // ===== Route Map =====
+  // ===== Route Map (identica) =====
   var routeMap = {
     primaria1: { name:'1ª primaria', paths:{
       'Addizioni entro 20': [makeAddRange(1,10,1,10)],
@@ -421,21 +487,36 @@
     liceo4: { name:'4ª liceo', paths:{
       'Trigonometria (angoli notevoli)': [genTrigNotable()],
       'f(x)=mx+q (valori)': [genLinearFuncValue()],
-      'Informatica: algoritmi e complessità (base)': [genCS_AlgoComplex()]
+      'Informatica: algoritmi/complessità': [genCS_AlgoComplex()]
     }},
     liceo5: { name:'5ª liceo', paths:{
       'Trigonometria (angoli notevoli)': [genTrigNotable()],
       'Quadratica (radici)': [genQuadraticRootsSimple()],
       'f(x)=mx+q (valori)': [genLinearFuncValue()],
-      'Informatica: sicurezza e privacy (avanzato)': [genCS_SecurityAdv()]
+      'Informatica: sicurezza avanzata': [genCS_SecurityAdv()]
     }}
   };
 
-  // Export map (debug da console)
-  try{ window.routeMap = routeMap; }catch(e){}
+  // ===== Motore "deck-based": nessuna ripetizione nella partita =====
+  var deck=[], deckIdx=0, currentPathName='', currentGradeKey='primaria2', level=0, stars=0, done=0, total=8, currentQuestion=null;
 
-  // ===== Stato e motore del gioco =====
-  var currentRoute=[], currentPathName='', currentGradeKey='primaria2', level=0, stars=0, done=0, total=8, currentQuestion=null;
+  function buildDeck(generators, desired){
+    var unique = new Map(); // key -> question object
+    var tries = 0, maxTries = desired*20;
+    while(unique.size < desired && tries < maxTries){
+      for(var i=0;i<generators.length;i++){
+        var q = generators[i]();
+        var key = norm(q.prompt);
+        if(!unique.has(key)){ unique.set(key,q); }
+        if(unique.size >= desired) break;
+      }
+      tries++;
+    }
+    // in caso di percorsi poveri, accettiamo quello che abbiamo
+    var arr = Array.from(unique.values());
+    shuffle(arr);
+    return arr;
+  }
 
   function populatePaths(){
     var g=$('livello'),p=$('percorso'); 
@@ -453,9 +534,11 @@
     currentGradeKey=g.value; 
     currentPathName=p.value; 
     var info=routeMap[currentGradeKey]; 
-    currentRoute=info.paths[currentPathName]; 
+    var generators = info.paths[currentPathName]; 
     level=0; stars=0; done=0; total=8; 
-    resetSeen(); 
+    deckIdx=0;
+    deck = buildDeck(generators, total*2); // deck abbondante
+    if(deck.length < total){ total = deck.length; }
     $('stars').textContent=stars; 
     $('progress').textContent=done; 
     $('total').textContent=total; 
@@ -472,8 +555,8 @@
   function nextQuestion(resetTitle){
     $('nextBtn').classList.add('hidden'); 
     $('choices').innerHTML=''; 
-    var gen=currentRoute[Math.min(level,currentRoute.length-1)]; 
-    currentQuestion=gen(); 
+    if(deckIdx >= deck.length){ endGame(); return; }
+    currentQuestion = deck[deckIdx++];
     $('prompt').textContent=currentQuestion.prompt; 
     $('legend').textContent = getLegendForPath(currentPathName); 
     currentQuestion.choices.forEach(function(c,idx){
@@ -489,25 +572,20 @@
   function selectChoice(idx, el){
     var correct = idx===currentQuestion.correct; 
     el.classList.add(correct?'correct':'wrong'); 
-    document.querySelectorAll('.choice').forEach(function(n){n.disabled=true;}); 
-    if(correct){
-      stars+=1; done+=1; 
-      $('stars').textContent=stars; 
-      $('progress').textContent=done;
-    } 
-    if(done>=total){ 
-      endGame(); 
-    } else { 
-      if(done%2===0){ level=Math.min(level+1,currentRoute.length-1);} 
-      $('nextBtn').classList.remove('hidden'); 
-    }
+    Array.prototype.forEach.call(document.querySelectorAll('.choice'), function(n){ n.disabled=true; });
+    if(correct){ stars+=1; done+=1; $('stars').textContent=stars; $('progress').textContent=done; }
+    if(done>=total || deckIdx>=deck.length){ endGame(); } 
+    else { $('nextBtn').classList.remove('hidden'); }
   }
 
   function endGame(){ 
     $('game').classList.add('hidden'); 
     $('summary').classList.remove('hidden'); 
     $('finalStars').textContent=stars.toFixed(1); 
-    $('feedback').textContent=(stars>=total*0.9)?'Ottimo lavoro!':(stars>=total*0.6)?'Ben fatto! Continua ad allenarti.':'Buon inizio! Riprova.'; 
+    var msg = (done>=total) ? 
+      ((stars>=total*0.9)?'Ottimo lavoro!':(stars>=total*0.6)?'Ben fatto! Continua ad allenarti.':'Buon inizio! Riprova.') :
+      'Hai completato tutte le domande disponibili per questo percorso.';
+    $('feedback').textContent=msg; 
   }
 
   // ===== Pulsanti & UI =====
@@ -521,7 +599,7 @@
     on($('menuBtn'),'click',function(){ $('game').classList.add('hidden'); $('intro').classList.remove('hidden'); }); 
     on($('againBtn'),'click',startGame); 
     on($('homeBtn'),'click',function(){ $('summary').classList.add('hidden'); $('intro').classList.remove('hidden'); }); 
-    on($('skipBtn'),'click',function(){ stars=Math.max(0,stars-0.5); nextQuestion(false); }); 
+    on($('skipBtn'),'click',function(){ /* niente penalità sul deck */ nextQuestion(false); }); 
     on($('nextBtn'),'click', function(){ nextQuestion(false); }); 
   });
 
@@ -532,7 +610,7 @@
     document.getElementById('statusBar').style.display=document.body.classList.contains('lim')?'block':'none'; 
   });
 
-  // ===== Installazione & auto-update (PWA) =====
+  // ===== PWA: install & auto-update =====
   var deferredPrompt=null; 
   window.addEventListener('beforeinstallprompt',function(e){
     e.preventDefault();deferredPrompt=e;
@@ -565,4 +643,4 @@
       window.location.reload(); 
     }); 
   }
-})();
+})(); 
